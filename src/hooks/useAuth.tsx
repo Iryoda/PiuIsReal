@@ -32,7 +32,7 @@ export const AuthProvider: React.FC = ({ children}) => {
         const token = localStorage.getItem('@Pipiuwer:token'); // Pega no storage o valor de token
         const user = localStorage.getItem('@Pipiuwer:user'); // Pega no storage o valor de user
 
-        if (user && token) {
+        if (user && token) { //Se tiver user e token retorna os valores deles
             return { token, user };
         }
 
@@ -42,15 +42,17 @@ export const AuthProvider: React.FC = ({ children}) => {
      //Parte de logout 
 
     const logout = useCallback(() => {
+        localStorage.clear();
+        /*
         localStorage.removeItem('@Piupiuwer:token');
         localStorage.removeItem('@Piupiuwer:user');
-
+        */
         setUserData({} as AuthState);
     }, []);
      //Parte de Request, não quis usar 'api' de proposito mas posso trocar por 
-     // const reponse = await api.post('/login', {user, password})
+     // const reponse = await api.post('/login', {user, password}) ao que parece
     const tokenRequest = useCallback(async( user, password) => {
-            const response = await axios({
+            await axios({
                 url: 'http://piupiuwer.polijr.com.br/login/',
                 method: 'POST',
                 data: {

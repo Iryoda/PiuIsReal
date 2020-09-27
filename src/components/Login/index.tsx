@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import LogoIcon from '../../assets/img/logo.svg';
 
 import { ThemeProvider } from 'styled-components';
@@ -15,13 +15,13 @@ const LogIn = () => {
     const [usuario, setUsuario] = useState(''); // Inicializa a variavel usuario com nada
     const [senha, setPassword] = useState('');
 
-    const handleLogin = useCallback(() => {
-        tokenRequest( usuario, senha);
-    }, [usuario, senha]);
+    const handleLogin = ()  => {
+        tokenRequest(usuario, senha);
+    };
         
     if(erro){
         erroMsg =
-        <a> Ops! Nome de usuário ou senha incorretos.</a>
+        <span> Ops! Nome de usuário ou senha incorretos.</span>
     }
 
     return(

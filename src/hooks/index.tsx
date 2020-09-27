@@ -12,3 +12,4 @@ const AppProvider: React.FC = ({ children }) => {
 }
 
 export default AppProvider;
+

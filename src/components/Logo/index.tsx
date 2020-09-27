@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 
 import logoIcon from '../../assets/img/logo.svg';
 import hamburguerIcon from '../../assets/img/hamburguer.svg';
@@ -15,9 +15,9 @@ const LogoBox: React.FC<LogoBoxProps> = (props) => {
 
      const {logout} = useAuth();
 
-     const handleLogout= useCallback(() => {
+     const handleLogout= () => {
          logout();
-     }, []);
+     }
      
      const [open, setMenuOpen] = useState(false);
 
