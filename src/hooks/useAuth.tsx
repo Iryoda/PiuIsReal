@@ -1,10 +1,6 @@
 import React, {createContext, useState, useContext, useCallback} from 'react';
 import axios from 'axios';
 
-interface ErroState{
-    state: boolean;
-}
-
 interface AuthState {
     token: string;
     user: string;
@@ -49,6 +45,7 @@ export const AuthProvider: React.FC = ({ children}) => {
         */
         setUserData({} as AuthState);
     }, []);
+    
      //Parte de Request, não quis usar 'api' de proposito mas posso trocar por 
      // const reponse = await api.post('/login', {user, password}) ao que parece
     const tokenRequest = useCallback(async( user, password) => {
@@ -60,15 +57,12 @@ export const AuthProvider: React.FC = ({ children}) => {
                     password: password,
                 }}).then(res => {    //Parte de tratamento de erro da resposta            
                     const { token } = res.data;
-                    console.log( token );
-                    console.log( user );
                     localStorage.setItem('@Pipiuwer:token', token);   // Passei token para meu usar Data
                     localStorage.setItem('@Pipiuwer:user', user);     //Quero passar user como parametro.
                     setErroState(false);
                     setUserData({token, user});
                 }).catch(error => {
                     setErroState(true);
-                    console.log("erro");
                 }) 
     }, []);
 

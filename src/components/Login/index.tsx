@@ -21,7 +21,7 @@ const LogIn = () => {
         
     if(erro){
         erroMsg =
-        <span> Ops! Nome de usuário ou senha incorretos.</span>
+        <p> Ops! Nome de usuário ou senha incorretos.</p>
     }
 
     return(

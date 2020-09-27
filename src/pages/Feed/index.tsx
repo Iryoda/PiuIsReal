@@ -1,15 +1,37 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import Boxes from '../../components/Boxes';
 import LogoBox from '../../components/Logo';
-import Posts from '../../components/Post';
+import Posts, { User } from '../../components/Post';
 import SearchBar from '../../components/SearchBar';
-import { useAuth} from '../../hooks/useAuth';
 import {Father, Coluna} from './styles';
+
+import { useAuth} from '../../hooks/useAuth';
+import { usePost} from '../../hooks/usePost';
+import api from '../../services';
 
 const Feed = () =>{
 
     const { user } = useAuth();
+    const [post, setPost] = useState([]);
+
+    /*
+      async function locatePost(){
+        await api.get('/pius').then(res => {
+        setPost(res.data);
+        console.log(res.data)
+        })
+    }
+    }, []); 
+    */ 
+    
+    useEffect(()=>{
+      async function locatePost(){
+        await api.get('/pius').then(res => {
+        setPost(res.data);
+        console.log(res.data)
+        })
+    }});
 
     return(
       <Father>
@@ -19,7 +41,9 @@ const Feed = () =>{
 
         <Coluna>
           <SearchBar />
-          <Posts />
+            {post.map(( item: User)=>{
+            return <Posts key={item.id} user = {item}/>
+           })}
         </Coluna>
 
         <Coluna>
@@ -34,5 +58,4 @@ const Feed = () =>{
   }
 
  
-
 export default Feed;

@@ -14,6 +14,7 @@ export const Content = styled.main`
     align-items: center;
     border-radius: 20px;
 
+    max-height: 40px;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);
     position: sticky;
     position: -webkit-sticky; top: 2px;

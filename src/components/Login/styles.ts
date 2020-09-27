@@ -12,9 +12,9 @@ export const Container = styled.div`
     align-items: flex-start;
     padding: 1.5rem;
 
-    a{
+    p{
         align-self: center;
-        font-size: 1.2rem;
+        font-size: 1.4rem;
         color: red;
     }
     span{
