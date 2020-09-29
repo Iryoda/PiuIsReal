@@ -1,5 +1,14 @@
 import React, {createContext, useState, useContext, useCallback} from 'react';
 import axios from 'axios';
+import api from '../services/index';
+import { Piu } from '../components/Post';
+
+
+interface UserPropsState{
+    id: number;
+    username: string;
+
+}
 
 interface AuthState {
     token: string;
@@ -13,17 +22,23 @@ interface AuthContexData {
     tokenRequest(user: string, password: string): void; 
     logout(): void;
     erro: boolean;
-}
 
+    userProps: UserPropsState;
+    getUser(user: string):void;
+
+}
 const AuthContext = createContext<AuthContexData>({} as AuthContexData);
 
 
 export const AuthProvider: React.FC = ({ children}) => {
 
-    const [erroState, setErroState] = useState(false); //Caso Há um erro no Request
 
-
+    const [user, setUserProps] = useState<UserPropsState>({} as UserPropsState);
+ 
+    //Caso Há um erro no Request
     //Aqui pega os dados que passei do Request e coloca na const userData
+    const [erroState, setErroState] = useState(false); 
+
     const [userData, setUserData] = useState<AuthState>(() => {
         const token = localStorage.getItem('@Pipiuwer:token'); // Pega no storage o valor de token
         const user = localStorage.getItem('@Pipiuwer:user'); // Pega no storage o valor de user
@@ -66,11 +81,24 @@ export const AuthProvider: React.FC = ({ children}) => {
                 }) 
     }, []);
 
+    const getUser = useCallback(async(user) =>{
+        await api.get('/usuarios').then(res=> {
+            var item = res.data.filter((data: UserPropsState) => {
+                if(data.username.includes(user)){
+                    console.log(data);
+                    return data.id;
+                }})
+            setUserProps(item);
+        })
+    }, []);
+
     return(
         <AuthContext.Provider 
             value={{ token: userData.token, //Define token como o valor de token em userData
                      user: userData.user,   //Define token como o valor de user em userData
-                     erro: erroState,        
+                     erro: erroState,
+                     userProps: user, 
+                     getUser,       
                      tokenRequest,          //Passa a funçao tokenRequest
                      logout}}>             
         {children}

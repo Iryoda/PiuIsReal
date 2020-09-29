@@ -4,10 +4,11 @@ import {theme1} from '../../assets/style/globalstyle';
 
 export const Box = styled.div`
     box-sizing: border-box;
-    background: ${props=> theme1.box};
     padding: 1rem;
+    background: ${props=> theme1.box};
     border-radius: 20px;
     overflow: hidden;
+    min-width: 100%;
 
 `;
 
@@ -17,22 +18,24 @@ export const Perfil = styled.div`
     align-items: center;
 
     img{
-        max-width: 64px ;
-        max-height: 64px;
-        overflow: hidden;
+        width: 64px;
+        height: 64px;
         border-radius: 100%;
+        overflow: hidden;
     }
 
     @media (min-width: 700px){
         img{
-            max-width: 80px ;
-            max-height: 80px;
+            width: 80px;
+            height: 80px;
+            border-radius: 100%;
         }
     } 
 `;
 
 export const Nametag = styled.div`
     background: #e5e5e5;
+    box-sizing: border-box;
     border-radius: 20px;
     width: 80%;
     height: 64px;
@@ -44,7 +47,7 @@ export const Nametag = styled.div`
     font-size: 1.4rem;
 
     span:nth-child(2){
-        font-size: 1.2rem;
+        font-size: 1rem;
         /*background-image: linear-gradient(
             ${props=> theme1.primary},
             ${props=> theme1.secondary}
@@ -55,7 +58,9 @@ export const Nametag = styled.div`
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;         
     }
-
+    span:nth-child(3){
+        font-size: 1rem;
+    }
     @media (min-width: 700px){
         width: 88%;
         font-size: 1.6rem;
@@ -79,3 +84,21 @@ export const Comentario = styled.div`
         font-size: 1.6rem;
     }
 `;
+
+export const Interactions = styled.div`
+    display: flex;
+    justify-content: space-between;    
+    img{
+        height: 1.8rem;
+    }
+    img:hover{
+        cursor: pointer;
+    }
+
+    @media(min-width: 700px){
+        img{
+            height: 2.1rem;
+        }
+    }
+
+`

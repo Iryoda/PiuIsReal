@@ -6,24 +6,30 @@ import {Container} from './styles';
 import {theme1} from '../../assets/style/globalstyle';
 
 interface boxesProps{
-    Name: string;
-    Link?: string;
+    link?: Links;
     
 }
 
-const Boxes: React.FunctionComponent<boxesProps> = (props) => {
+export interface Links{
+    link1: string;
+    link2: string;
+    link3: string;
+    link4: string;
+}
+
+const Trending: React.FunctionComponent<boxesProps> = (props) => {
 
     return(
         <ThemeProvider theme={theme1}>
             <Container>
-            <span><strong>{props.Name}</strong></span>
+            <span><strong>Trendings</strong></span>
                 <br/><br/>
-                <Link to="/modal">
-                   <a>{props.Link}</a>
+                <Link to="/feed">
+                <a>{props.link}</a>
                 </Link>
             </Container>
         </ThemeProvider>
     )
 }
 
-export default Boxes;
+export default Trending;

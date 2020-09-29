@@ -26,7 +26,7 @@ const LogoBox: React.FC<LogoBoxProps> = (props) => {
      if(open){
         menuOpen =
         <div>
-            <span> {props.User}</span>
+            <span>Olá! {props.User}</span>
             <span>#home</span>
             <span>#trending</span>
             <span>#perfil</span>

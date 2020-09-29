@@ -3,7 +3,7 @@ import {createGlobalStyle} from 'styled-components';
 export const GlobalStyle = createGlobalStyle`
 
     :root{
-        font-size: 90%;
+        font-size: 85%;
     }
     *{  
         margin: 0;
@@ -22,11 +22,13 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     ::-webkit-scrollbar {
-    width: 10px;
+        width: 10px;
+        
     }
 
     ::-webkit-scrollbar-track {
     background: #d5d5d5;
+
     }
 
     ::-webkit-scrollbar-thumb {
@@ -39,7 +41,7 @@ export const theme1 =
 {
     primary: '#00D1FF',
     secondary: '#FF00C7',
-    background: '#E5E5E5',
+    background: '#eee',
     box: '#fff', 
 
 }
