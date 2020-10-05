@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { useModal } from '../../hooks/useModal';
 import { usePost } from '../../hooks/usePost';
-import {Fundo, Content, Counter, Cont} from './styles';
+import {Fundo, Content, Counter, Cont, Organizer} from './styles';
 
 import buttonIcon from '../../assets/img/button.svg'
 
@@ -53,26 +53,28 @@ const Modal = () => {
         return(
             <Fundo>
                 <Content>
-                    <div>
-                        <span>Comentário</span>
-                        <span onClick = {()=> closeModal()}> X </span>
-                    </div>
-                    <textarea
-                        value = {userComment}
-                        onChange = {(e) => handleText(e.target)}
-                    ></textarea>
-                    <Counter 
-                        overLimit = {mod}
-                        >
-                        {count}/140
-                    </Counter>
-                    <span>{errorMsg}</span>
-                    <Cont>
-                        <img 
-                            src= {buttonIcon}
-                            onClick = {() => handlePost(userComment)}
-                            alt = "send.svg"/>
-                    </Cont>
+                    <Organizer>
+                        <div>
+                            <span>Comentário</span>
+                            <span onClick = {()=> closeModal()}> X </span>
+                        </div>
+                        <textarea
+                            value = {userComment}
+                            onChange = {(e) => handleText(e.target)}
+                        ></textarea>
+                        <Counter 
+                            overLimit = {mod}
+                            >
+                            {count}/140
+                        </Counter>
+                        <span>{errorMsg}</span>
+                        <Cont>
+                            <img 
+                                src= {buttonIcon}
+                                onClick = {() => handlePost(userComment)}
+                                alt = "send.svg"/>
+                        </Cont>
+                    </Organizer>
                 </Content>
             </Fundo>
         )

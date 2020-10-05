@@ -2,7 +2,7 @@ import React from 'react';
 import { useDelete } from '../../hooks/usaDelete';
 import { useModal } from '../../hooks/useModal';
 import { Fundo } from '../Modal/styles';
-import {Box, Content} from './styles';
+import {Box, Content, Display} from './styles';
 
 const ModalConfirm = () =>{
     const{ modalConfirmState, closeConfirmModal, piuId, token } = useModal();
@@ -19,7 +19,7 @@ const ModalConfirm = () =>{
     <Fundo>
         <Box>
             <span>Quer mesmo excluir seu post?</span>
-            <div>
+            <Display>
                 <Content 
                     Colored = {false}
                     onClick = {() => handleDelete()}>
@@ -28,7 +28,7 @@ const ModalConfirm = () =>{
                 <Content Colored= {true} onClick = {() => closeConfirmModal()}>
                     <span> No</span>
                 </Content>
-            </div>
+            </Display>
         </Box>
     </Fundo>
     )}

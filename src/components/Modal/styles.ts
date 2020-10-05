@@ -83,7 +83,12 @@ export const Content = styled.main`
         height: 300px;
     }
 `;
+export const Organizer = styled.div`
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
 
+`
 export const Cont = styled.div`
     background: ${props=> props.theme.box};
     border-radius: 20px;
@@ -96,6 +101,9 @@ export const Cont = styled.div`
     box-sizing: border-box;
     padding: 0.5rem;
 
+    img{
+        align-self: flex-end;
+    }
     @media (min-width: 700px){
 
     }

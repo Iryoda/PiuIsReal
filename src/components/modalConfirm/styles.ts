@@ -24,12 +24,13 @@ export const Box = styled.div`
     span{
         font-size: 1.6rem;
     }
-    div{
-        display: flex;
-        justify-content: space-between;
-        box-sizing: border-box;
-    }
 `
+export const Display = styled.div`
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    box-sizing: border-box;
+`;
 
 export const Content = styled.div<ContentProps>`
     background: ${props => props.Colored ? props.theme.primary : props.theme.box };
