@@ -1,21 +1,26 @@
-import React, { createContext, useCallback, useContext } from 'react';
+import React, { createContext, useCallback, useContext, useState } from 'react';
 import Axios from 'axios';
-import { useAuth } from './useAuth';
 
-
-
+//Interface------------------------------------------
 interface PostContextData{
-    postItem( location: string, userId: number, text: string) : void;
+    postComment( location: string, userId: number, text: string, token: string): void;
+    darLike( location: string, userId: number, piuId: number, token: string): void;
+    erroLike: boolean;
+    erroComment: boolean;
 }
 
+//Context  ------------------------------------------------------
  const PostContext = createContext<PostContextData>({} as PostContextData);
 
  export const PostProvider: React.FC = ({children}) => {
 
-    const postComment = useCallback(async(location, userId, text)=> {
-        const token = localStorage.getItem('@Piupiuwer:token');
+    const [erroLike, setErrolike] = useState(false);
+    const [erroComment, setErroComment] = useState(false);
+//postComment Function ------------------------------------------
+
+    const postComment = useCallback(async(location, userId, text, token)=> {
         await Axios({
-            url: `http://piupiuwer.polijr.com.br/${location}`,
+            url: `http://piupiuwer.polijr.com.br/${location}/`,
             method: 'POST',
             headers: {
                 Authorization: `JWT ${token}`
@@ -25,14 +30,38 @@ interface PostContextData{
                 texto: text,
             }
             }).then(() =>{
+                setErroComment(false);
+            }).catch(() =>{
+                setErroComment(true);
+            })
+    }, []);
+    
+//darLike Function ------------------------------------------
+
+    const darLike = useCallback(async(location, userId, piuId, token)=> {
+        await Axios({
+            url: `http://piupiuwer.polijr.com.br/pius/${location}/`,
+            method: 'POST',
+            headers: {
+                Authorization: `JWT ${token}`
+            },
+            data: {
+                usuario: userId,
+                piu: piuId,
+            }
+            }).then(() =>{
                 console.log("eeee!");
+                setErrolike(false);
             }).catch(() =>{
                 console.log("erro")
+                setErrolike(true);
             })
-}, []);
-    
+    }, []);
+
+//return do Provider ------------------------------------------
+
       return(
-          <PostContext.Provider value = {{postItem: postComment}}>
+          <PostContext.Provider value = {{postComment: postComment, darLike: darLike, erroLike: erroLike, erroComment: erroComment}}>
               {children}
           </PostContext.Provider>
       )

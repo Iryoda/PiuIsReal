@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import {theme1} from '../../assets/style/globalstyle';
+
 
 
 export const Box = styled.div`
     box-sizing: border-box;
     padding: 1rem;
-    background: ${props=> theme1.box};
+    background: ${props=> props.theme.box};
     border-radius: 20px;
     overflow: hidden;
     min-width: 100%;
@@ -18,8 +18,8 @@ export const Perfil = styled.div`
     align-items: center;
 
     img{
-        width: 64px;
-        height: 64px;
+        width: 60px;
+        height: 60px;
         border-radius: 100%;
         overflow: hidden;
     }
@@ -38,7 +38,8 @@ export const Nametag = styled.div`
     box-sizing: border-box;
     border-radius: 20px;
     width: 80%;
-    height: 64px;
+    min-height: 64px;
+    max-height: px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -48,12 +49,7 @@ export const Nametag = styled.div`
 
     span:nth-child(2){
         font-size: 1rem;
-        /*background-image: linear-gradient(
-            ${props=> theme1.primary},
-            ${props=> theme1.secondary}
-        );*/
-        background-image: linear-gradient(#00d1ff,
-        blue);
+        background-image: linear-gradient(#00d1ff, blue);
         background-clip: text;
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;         
@@ -77,7 +73,7 @@ export const Comentario = styled.div`
     font-size: 1.4rem;
     text-overflow: clip;
     margin-bottom: 1rem;
-    margin-top: 1rem;
+    margin-top: 2rem;
     min-height: 3rem;
 
     @media(min-width: 700px){
@@ -87,18 +83,32 @@ export const Comentario = styled.div`
 
 export const Interactions = styled.div`
     display: flex;
+    padding: 0rem 0.5rem;
     justify-content: space-between;    
+
     img{
         height: 1.8rem;
     }
+
     img:hover{
         cursor: pointer;
+    }
+
+    div{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+     
+    }
+    div span{
+        margin-left: 2rem;
     }
 
     @media(min-width: 700px){
         img{
             height: 2.1rem;
         }
+        
     }
 
 `

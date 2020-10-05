@@ -1,62 +1,114 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 import LogoBox from '../../components/Logo';
 import Posts, { Piu } from '../../components/Post';
 import SearchBar from '../../components/SearchBar';
 import {Father, Coluna} from './styles';
 
-import { useAuth} from '../../hooks/useAuth';
-
 import api from '../../services';
+import { useAuth} from '../../hooks/useAuth';
 import { useSearch } from '../../hooks/useSearch';
+
 import Actions from '../../components/Actions';
-import Trending, {Links} from '../../components/Trending';
+import Trending from '../../components/Trending';
 import Modal from '../../components/Modal';
-import { useComment } from '../../hooks/useComment';
+import PostTemplate from '../../components/PiuTemplate';
+import ModalConfirm from '../../components/modalConfirm';
 
 const Feed = () =>{
     
-    const {getUser} = useAuth();
-    const { userProps } = useAuth();
-    const { user } = useAuth();
+    let frankstein, contactsFather;
+    const {getUser, user, userProps} = useAuth();
     const { word} = useSearch();
+    const [pius, setPius] = useState<Piu[]>([]); 
+    const [ test, setTest ] = useState(false);
+
+//Varredura de Pius com Like
+    const favPiusIds = useMemo(() => {
+      const favPius = pius.filter( piu => {
+        const piuQueFav = piu.favoritado_por.map(item => item.id)
+          return piuQueFav.includes(userProps.id);
+      })
+      return favPius.map(piu => piu.id);
+    }, [pius, userProps]);
+
+//Varredura de Pius Fav
+    const likedPiusIds = useMemo( ()=> {
+        //Retorna array com o id dos pius que o usuario deu like
+        const likedPius = pius.filter(piu => { 
+          const usuariosQueDeramLike = piu.likers.map(item => item.id)
+          return usuariosQueDeramLike.includes(userProps.id); 
+        })
+        return likedPius.map(piu => piu.id);
+    }, [pius, userProps]);
     
-    const [post, setPost] = useState([]); 
-    
+    useEffect(()=>{
+      getUser(user);
+    }, []);
+
     useEffect(()=>{
       async function locatePost(){
         await api.get('/pius').then(res => {
-        setPost(res.data);
+        setPius(res.data);
+        setTest(true);
         })}
-        getUser(user);
         locatePost();
-      }, []);
+      }, [pius]);
 
-      console.log(userProps);
+
+    if(test)
+    {
+      frankstein = 
+        pius.map(( item: Piu)=>{
+        //Search
+        if(word == null){ 
+          return(
+            <Posts 
+              key={item.id}
+              piu={item}
+              user={item.usuario}
+              isLiked={likedPiusIds.includes(item.id)}
+              isFaved={favPiusIds.includes(item.id)}
+            />
+          )
+        }
+        else if(  item.usuario.first_name.toLowerCase().includes(word.toLowerCase()) 
+                ||item.usuario.last_name.toLowerCase().includes(word.toLowerCase())
+                ||item.usuario.username.toLowerCase().includes(word.toLowerCase()))
+        {
+          return( 
+            <Posts 
+              key={item.id} 
+              piu={item} 
+              user={item.usuario} 
+              isLiked={ likedPiusIds.includes(item.id)}
+              isFaved={favPiusIds.includes(item.id)}
+            />
+          )  
+        }})
+        } else {
+          frankstein = 
+            <div>
+              <PostTemplate/>
+              <PostTemplate/>
+              <PostTemplate/>
+              <PostTemplate/>
+              <PostTemplate/>          
+            </div>
+      };  
+
     return(
       <div>
-        <Modal/>
-        <Father>
+      <Modal/>
+      <ModalConfirm/>
+      <Father >
           <Coluna>
             <LogoBox User= {user}/>
           </Coluna>
 
           <Coluna >
             <SearchBar />
-              {post.map(( item: Piu)=>{
-                //Condiçao de search ela vai comporar a 'word' que é o input da search bar se for 'null' vai mostrar todos
-                //Se não for vai mostrar o que contiverem a word. Isso é feito na array já carregado, ou seja não faz 
-                //requisiçao na api, é mais rapido! porém e limitado aos pius já carregados.
-              if(word == null){ 
-                return <Posts key={item.id} piu = {item}  user = {item.usuario}/>
-              }
-              else if(  item.usuario.first_name.toLowerCase().includes(word.toLowerCase()) 
-                      ||item.usuario.last_name.toLowerCase().includes(word.toLowerCase())
-                      ||item.usuario.username.toLowerCase().includes(word.toLowerCase()))
-              {
-                return <Posts key={item.id} piu = {item}  user = {item.usuario}/>
-              }
-            })}
+             {frankstein}
           </Coluna>
 
           <Coluna>

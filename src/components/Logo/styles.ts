@@ -1,6 +1,12 @@
 import styled from 'styled-components';
 
 export const Borda = styled.div`
+    width: 100%;
+
+    -webkit-position: sticky;
+    position: sticky;
+    top: 1rem;
+
     box-sizing: border-box;
     border-top-right-radius: 21px;
     border-bottom-right-radius: 21px;
@@ -48,7 +54,7 @@ export const Content = styled.div`
     box-sizing: border-box;
     padding: 1rem;
     font-size: 1.4rem;
-    
+
     border-top-right-radius: 20px;
     border-bottom-right-radius: 20px;
  

@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-
-import { ThemeProvider } from 'styled-components';
-import { theme1 } from '../../assets/style/globalstyle';
+import React, { useEffect, useState } from 'react';
 
 import { useAuth } from '../../hooks/useAuth';
 import { useModal } from '../../hooks/useModal';
 import { usePost } from '../../hooks/usePost';
-import {Fundo, Content} from './styles';
+import {Fundo, Content, Counter, Cont} from './styles';
+
+import buttonIcon from '../../assets/img/button.svg'
 
 interface text{
     value: string;
@@ -15,15 +14,24 @@ interface text{
 
 const Modal = () => {
 
-    const { postItem}  = usePost();
-    const {modalState} = useModal();
-    const {closeModal} = useModal();
+    const {userProps ,token} = useAuth();
+    const { postComment}  = usePost();
+    const {modalState, closeModal} = useModal();
 
+    const [mod, setMod] = useState(false);
     const [count, setCount] = useState(0);
     const [userComment, setComment] = useState('');
+    const [errorMsg, setErrorMsg] = useState('');
 
     function handlePost(props: string){
-        console.log(props);
+        if( props.length > 0 && props.length <= 140){
+            postComment("pius", userProps.id, props, token)
+            closeModal();
+        }else if(props.length === 0){
+        setErrorMsg("Você precisa escrever algo para poder postar!")
+            }else if(props.length > 140){
+            setErrorMsg("Ei, você passou o limite!");
+        }
     }
 
     function handleText(props: text){
@@ -32,24 +40,41 @@ const Modal = () => {
         console.log()
     }
 
+    useEffect(()=> {
+        if(count > 140){
+            setMod(true);
+        } else {
+            setMod(false);
+        }
+    }, [count]);
 
     if(modalState){
 
         return(
-            <ThemeProvider theme= {theme1}>
             <Fundo>
                 <Content>
-                    <span>Comentário</span>
+                    <div>
+                        <span>Comentário</span>
+                        <span onClick = {()=> closeModal()}> X </span>
+                    </div>
                     <textarea
-                        value={userComment}
+                        value = {userComment}
                         onChange = {(e) => handleText(e.target)}
                     ></textarea>
-                    <span> {count}/140</span>
-                    <button onClick={()=> closeModal()}> X </button>
-                    <button onClick={()=> handlePost(userComment)}> teste</button>
+                    <Counter 
+                        overLimit = {mod}
+                        >
+                        {count}/140
+                    </Counter>
+                    <span>{errorMsg}</span>
+                    <Cont>
+                        <img 
+                            src= {buttonIcon}
+                            onClick = {() => handlePost(userComment)}
+                            alt = "send.svg"/>
+                    </Cont>
                 </Content>
             </Fundo>
-        </ThemeProvider>
         )
     }
 

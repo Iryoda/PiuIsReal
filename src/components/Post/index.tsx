@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import {ThemeProvider} from 'styled-components';
-import {theme1} from '../../assets/style/globalstyle';
 import {Box, Perfil as User, Nametag, Comentario, Interactions} from './styles'
 
-import flagIcon from '../../assets/img/flag.svg';
+import favIcon from '../../assets/img/star.svg';
+import favIconPainted from '../../assets/img/star_painted.svg';
 import commentIcon from '../../assets/img/comment.svg';
 import repiuIcon from '../../assets/img/repiu.svg';
 import heartIcon from '../../assets/img/heart.svg';
-import heartIconPainted from '../../assets/img/heart_activate.svg';
+import heartIconPainted from '../../assets/img/heart_activated.svg';
+import trashIcon from '../../assets/img/trash.svg';
+
+import { usePost } from '../../hooks/usePost';
+import { useAuth } from '../../hooks/useAuth';
+import { useDelete } from '../../hooks/usaDelete';
+import { useModal } from '../../hooks/useModal';
 
 export interface Piu{ //Cria 'atributos' de user
     id: number;
     texto: string;
     usuario: User; //usuario se comporta como a interface User. <- a ideia é não escrever user.usuario.ksdjflkasjdf
     horario: string;
-    favoritado_por: object;
-    likers: object;
-    length: number;
+    favoritado_por: User[];
+    likers: User[];
 
 } 
 
@@ -33,49 +37,66 @@ interface User{
 interface PostProps{ //Apenas para facilidade de aplicaçao podia usar de boa apenas 'User'
     piu: Piu;
     user: User;
-    
+    isLiked: boolean;
+    isFaved: boolean
 }
+// O que importa ->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
+const Posts: React.FC<PostProps> = ( { piu, user, isLiked, isFaved}) => {
+    
+    let owner;
 
-const Posts: React.FC<PostProps> = ( { piu, user }) => {
-    const [like, setLike] = useState(0);
-    const [isliked, setIsLiked] = useState(false);
-
+    const {userProps, token} = useAuth();
+    const { darLike} = usePost();
+    const { showConfirmModal} = useModal();
+    
     function handleLike(){
-        var number = like;
-        if(isliked){
-            number = number - 1;
-            setLike(number);
-            setIsLiked(!isliked);
-        } else {
-            number = number + 1;
-            setLike(number);
-            setIsLiked(!isliked)
-        }
+        darLike("dar-like", userProps.id, piu.id, token);
     }
 
+    if(user.id === userProps.id){
+        owner = <img src = {trashIcon}
+                     alt = "flag"
+                     onClick = {() => showConfirmModal(piu.id, token)}
+                     />
+    }else {
+        owner =<img 
+                src = {isFaved ? favIconPainted : favIcon } 
+                alt = "flag"
+                onClick = {() => darLike("favoritar", userProps.id, piu.id, token)}
+
+               />
+    }
+
+// Return ------------------------------------
     return(
-        <ThemeProvider theme={theme1}>
-            <Box> 
-                <User>
-                    <img src={user.foto} alt="user"/>
-                    <Nametag>
-                        <span>{user.first_name} {user.last_name}</span>
-                        <span>@{user.username}</span>
-                        <span>"{user.sobre}"</span>
-                    </Nametag>
-                </User>
-                <Comentario> {piu.texto}</Comentario>
-                <Interactions>
-                        <img src={heartIcon} alt="heart" onClick={(e) => handleLike()}/>
-                        <span>{piu.length}</span>
-                        <img src={commentIcon} alt="comment"/>
-                        <img src={repiuIcon} alt="repiu"/>
-                        <img src={flagIcon} alt="flag"/>
-                </Interactions>
-            </Box>
-        </ThemeProvider>
+        <Box> 
+            <User>
+                <img src={user.foto} alt="user"/>
+                <Nametag>
+                    <span>{user.first_name} {user.last_name}</span>
+                    <span>@{user.username}</span>
+                    <span>"{user.sobre}"</span>
+                </Nametag>
+            </User>
+            <Comentario> {piu.texto}</Comentario>
+            <Interactions>
+                <div>
+                    <img src = {isLiked ? heartIconPainted : heartIcon}
+                        alt = "heart" 
+                        onClick={() => handleLike()}
+                    />
+                    <span>{piu.likers.length}</span>
+                </div>
+                <img src = {commentIcon} alt="comment"/>
+                <img src = {repiuIcon} alt="repiu"/>
+
+                {owner}
+
+            </Interactions>
+        </Box>
+
     )
-}
+} // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 export default Posts;

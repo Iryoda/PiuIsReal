@@ -1,13 +1,17 @@
 import React, {createContext, useState, useContext, useCallback} from 'react';
 import axios from 'axios';
 import api from '../services/index';
-import { Piu } from '../components/Post';
 
+//Interface  ------------------------------------------
 
-interface UserPropsState{
+export interface UserPropsState{
     id: number;
     username: string;
-
+    seguidores: object;
+    foto: string;
+    sobre: string;
+    seguindo: object;
+    first_name: string;
 }
 
 interface AuthState {
@@ -27,13 +31,16 @@ interface AuthContexData {
     getUser(user: string):void;
 
 }
+//AuthCointexte ------------------------------------------
 const AuthContext = createContext<AuthContexData>({} as AuthContexData);
 
 
-export const AuthProvider: React.FC = ({ children}) => {
+export const AuthProvider: React.FC = ({ children}) => 
+{ //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
 
+//Constantes  ------------------------------------------
 
-    const [user, setUserProps] = useState<UserPropsState>({} as UserPropsState);
+    const [user, setUserId] = useState<UserPropsState>({} as UserPropsState);
  
     //Caso Há um erro no Request
     //Aqui pega os dados que passei do Request e coloca na const userData
@@ -50,7 +57,7 @@ export const AuthProvider: React.FC = ({ children}) => {
         return {} as AuthState;
      });
 
-     //Parte de logout 
+ //logout Function ------------------------------------------
 
     const logout = useCallback(() => {
         localStorage.clear();
@@ -60,9 +67,11 @@ export const AuthProvider: React.FC = ({ children}) => {
         */
         setUserData({} as AuthState);
     }, []);
-    
-     //Parte de Request, não quis usar 'api' de proposito mas posso trocar por 
-     // const reponse = await api.post('/login', {user, password}) ao que parece
+
+//tokenRequest Function ------------------------------------------
+
+    //Parte de Request, não quis usar 'api' de proposito mas posso trocar por 
+    // const reponse = await api.post('/login', {user, password}) ao que parece
     const tokenRequest = useCallback(async( user, password) => {
             await axios({
                 url: 'http://piupiuwer.polijr.com.br/login/',
@@ -81,16 +90,18 @@ export const AuthProvider: React.FC = ({ children}) => {
                 }) 
     }, []);
 
+//getUser ------------------------------------------
+    
+    //Ele toma conta do de pagar a informçao do usario
     const getUser = useCallback(async(user) =>{
         await api.get('/usuarios').then(res=> {
-            var item = res.data.filter((data: UserPropsState) => {
+            res.data.filter((data: UserPropsState) => {
                 if(data.username.includes(user)){
-                    console.log(data);
-                    return data.id;
+                    setUserId(data);
                 }})
-            setUserProps(item);
-        })
-    }, []);
+        })}, []);
+
+//Return Provider ------------------------------------------
 
     return(
         <AuthContext.Provider 
@@ -104,8 +115,7 @@ export const AuthProvider: React.FC = ({ children}) => {
         {children}
         </AuthContext.Provider>
     )
-}
-
+}  //<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 export function useAuth(): AuthContexData {
     const context = useContext(AuthContext);

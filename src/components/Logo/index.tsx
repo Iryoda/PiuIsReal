@@ -3,16 +3,17 @@ import React, { useState } from 'react';
 import logoIcon from '../../assets/img/logo.svg';
 import hamburguerIcon from '../../assets/img/hamburguer.svg';
 
-import {ThemeProvider} from 'styled-components';
+
 import {Borda, Header, Content} from './styles';
-import {theme1} from '../../assets/style/globalstyle';
 import { useAuth } from '../../hooks/useAuth';
+import { useModal } from '../../hooks/useModal';
 
 interface LogoBoxProps{
     User: string;
 }
 const LogoBox: React.FC<LogoBoxProps> = (props) => {
 
+     const {showModal} = useModal();
      const {logout} = useAuth();
 
      const handleLogout= () => {
@@ -31,7 +32,9 @@ const LogoBox: React.FC<LogoBoxProps> = (props) => {
             <span>#trending</span>
             <span>#perfil</span>
             <br/>
-            <span>+ New Post</span>
+            <span
+                onClick = {() => showModal()}
+                >+ New Post</span>
             <br/>
             <span
                 onClick = {() => handleLogout()}
@@ -40,12 +43,11 @@ const LogoBox: React.FC<LogoBoxProps> = (props) => {
      }
 
     return (
-    <ThemeProvider theme ={theme1}>
         <Borda>
             <Content>
                 <Header>
                     <img 
-                        src = {logoIcon} 
+                        src ={logoIcon} 
                         alt = "logoIcon"
                         height = "26px;"
                     />
@@ -60,7 +62,6 @@ const LogoBox: React.FC<LogoBoxProps> = (props) => {
                     {menuOpen}
             </Content>
         </Borda>
-    </ThemeProvider>
         )
  }
 

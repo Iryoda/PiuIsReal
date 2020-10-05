@@ -9,10 +9,9 @@ export const Content = styled.main`
     align-items: center;
     border-radius: 20px;
 
+    z-index: 1;
     max-height: 40px;
     box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
-    position: sticky;
-    position: -webkit-sticky; top: 2px;
 
     img{
         opacity: 0.5;
@@ -29,5 +28,9 @@ export const Content = styled.main`
         font-size: 20px;
     }
     
+    @media(min-width: 700px){
+        position: sticky;
+        top: 0.5rem;
+    }
 
 `;

@@ -1,10 +1,13 @@
 import React from 'react';
 
+import { DeleteProvider } from './usaDelete';
 import { AuthProvider } from './useAuth';
-import { CommentProvider } from './useComment';
+import { GetProvider } from './useGet';
 import { ModalProvider } from './useModal';
 import { PostProvider } from './usePost';
 import { SearchProvider } from './useSearch';
+import { ThemeProvider} from 'styled-components';
+import {theme1} from '../assets/style/globalstyle';
 
 
 const AppProvider: React.FC = ({ children }) => {
@@ -12,11 +15,15 @@ const AppProvider: React.FC = ({ children }) => {
         <AuthProvider>
             <SearchProvider>
                 <ModalProvider>
-                     <CommentProvider>
+                     <GetProvider>
                         <PostProvider>
-                            {children}
+                            <DeleteProvider>
+                                <ThemeProvider theme = {theme1}>
+                                    {children}
+                                </ThemeProvider>
+                            </DeleteProvider>
                         </PostProvider>
-                     </CommentProvider>
+                     </GetProvider>
                 </ModalProvider>
             </SearchProvider>
         </AuthProvider>

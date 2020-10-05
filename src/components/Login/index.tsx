@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import LogoIcon from '../../assets/img/logo.svg';
 
-import { ThemeProvider } from 'styled-components';
-import { theme1 } from '../../assets/style/globalstyle';
 import {Container, Dados} from './styles';
 import { useAuth } from '../../hooks/useAuth';
+import eyeOpenIcon from '../../assets/img/eyeOpen.svg';
+import eyeCloseIcon from '../../assets/img/eyeClose.svg';
 
 const LogIn = () => {
 
     let erroMsg;
 
+    const [showPassword, setShowPassword] = useState(false);
     const { tokenRequest } = useAuth();
     const { erro } = useAuth();
     const [usuario, setUsuario] = useState(''); // Inicializa a variavel usuario com nada
@@ -19,20 +20,20 @@ const LogIn = () => {
         tokenRequest(usuario, senha);
     };
         
+
     if(erro){
         erroMsg =
         <p> Ops! Nome de usuário ou senha incorretos.</p>
     }
 
     return(
-        <ThemeProvider theme={theme1}>
             <Container>
                     <img src={LogoIcon} alt="Logo"/>
                     <span>Nome de Usuário:</span>
                     <Dados>
                         <input
-                            type="text"
-                            className= "nomeUsuario"
+                            type ="text"
+                            className = "nomeUsuario"
                             value = {usuario}
                             onChange = {(e) => setUsuario(e.target.value)} //Altera o valor de usuario
                         ></input>
@@ -40,12 +41,18 @@ const LogIn = () => {
                     <span>Senha:</span>
                     <Dados>
                         <input
-                            type= "text"
-                            className= "senhaUsuario"
+                            type = {showPassword ? "text" : "password"}
+                            className = "senhaUsuario"
                             value = {senha}
                             onChange = {(e) => setPassword(e.target.value)}//Altera o valor de senha
                         >
                         </input>
+                        <div>
+                            <img 
+                                src = {showPassword ? eyeOpenIcon : eyeCloseIcon} 
+                                alt = "eyeImg.svg"
+                                onClick = {()=> setShowPassword(!showPassword)}/> 
+                        </div>
                     </Dados>
                     {erroMsg}
                     <button
@@ -53,7 +60,6 @@ const LogIn = () => {
                         onClick = {() => handleLogin()}//Faz o metodo post na API!
                     >Press Me</button>
             </Container>
-        </ThemeProvider>
     )
 }
 

@@ -77,7 +77,22 @@ export const Dados = styled.div`
     padding: 0rem 0rem 0.3rem 0rem;
     width: 100%;
     margin-top: -2rem;
+    display: flex;
 
+    div{
+        background:${props => props.theme.box}; 
+        height: 3rem;
+        width: 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    img{
+        background:${props => props.theme.box};
+        height: 15px;
+        background: none;
+        opacity: 0.7;
+    }
     input{
         background: ${props => props.theme.box}; 
         padding: 0rem 0.5rem; 
@@ -85,8 +100,6 @@ export const Dados = styled.div`
         height: 3rem;
         outline: none;
         border: none;
-        font-size: 1.4rem;
-        
+        font-size: 1.6rem;
     }
-
 `;
